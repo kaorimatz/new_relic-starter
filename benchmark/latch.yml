@@ -1,0 +1,6 @@
+loop_count: 100000000
+prelude: |
+  require 'new_relic/starter'
+  latch = NewRelic::Starter::Latch.new('tmp/latch').tap(&:open)
+benchmark:
+  opened?: latch.opened?

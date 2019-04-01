@@ -1,0 +1,10 @@
+/.env
+/.rspec_status
+/.yardoc/
+/Gemfile.lock
+/coverage/
+/doc/
+/lib/new_relic_starter.bundle
+/log/
+/pkg/
+/tmp/

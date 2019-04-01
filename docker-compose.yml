@@ -1,0 +1,41 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    ports:
+      - "6379"
+  resque:
+    build:
+      context: .
+      dockerfile: example/Dockerfile
+    command: ["resqued", "resqued.rb"]
+    depends_on:
+      - redis
+    environment:
+      - NEW_RELIC_LICENSE_KEY
+      - NEW_RELIC_LOG=STDOUT
+      - NEW_RELIC_LOG_LEVEL=debug
+      - NEW_RELIC_STARTER_LATCH_PATH=/new_relic_starter/latch
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - new_relic_starter:/new_relic_starter
+  sh:
+    image: busybox
+    volumes:
+      - new_relic_starter:/new_relic_starter
+  unicorn:
+    build:
+      context: .
+      dockerfile: example/Dockerfile
+    command: ["unicorn", "-c", "unicorn.conf.rb", "config.ru"]
+    environment:
+      - NEW_RELIC_LICENSE_KEY
+      - NEW_RELIC_LOG=STDOUT
+      - NEW_RELIC_LOG_LEVEL=debug
+      - NEW_RELIC_STARTER_LATCH_PATH=/new_relic_starter/latch
+    volumes:
+      - new_relic_starter:/new_relic_starter
+    ports:
+      - "8080"
+volumes:
+  new_relic_starter:
