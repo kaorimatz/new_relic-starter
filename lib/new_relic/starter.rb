@@ -24,11 +24,13 @@ module NewRelic
     # Starts the new Relic agent if the agent is not started and the latch is
     # opened.
     #
+    # @param options [Hash] The options passed through to
+    #   {NewRelic::Agent.manual_start}
     # @return [Boolean] true if the new Relic agent is started
-    def start
+    def start(options = {})
       return false if @started || !@latch.opened?
 
-      NewRelic::Agent.manual_start
+      NewRelic::Agent.manual_start(options)
       @started = true
     end
   end

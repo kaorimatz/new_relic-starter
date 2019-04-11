@@ -95,7 +95,7 @@ If your Resque worker forks before processing a job, you can add a hook to start
 ```ruby
 starter = NewRelic::Starter.new(NewRelic::Starter::Latch.new("/path/to/latch"))
 Resque.before_fork do
-  starter.start
+  starter.start(dispatcher: :resque, start_channel_listener: true)
 end
 ```
 

@@ -16,6 +16,13 @@ RSpec.describe NewRelic::Starter do
       expect(starter.start).to eq(true)
     end
 
+    it 'starts the New Relic agent with given options if the latch is opened' do
+      expect(NewRelic::Agent).to receive(:manual_start).with(foo: :bar).once
+      latch = NewRelic::Starter::Latch.new.tap(&:open)
+      starter = described_class.new(latch)
+      expect(starter.start(foo: :bar)).to eq(true)
+    end
+
     it "doesn't start the New Relic agent if it's already started" do
       expect(NewRelic::Agent).to receive(:manual_start).once
       latch = NewRelic::Starter::Latch.new.tap(&:open)

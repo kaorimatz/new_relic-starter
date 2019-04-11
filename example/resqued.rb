@@ -6,7 +6,7 @@ before_fork do
   latch = NewRelic::Starter::Latch.new(ENV['NEW_RELIC_STARTER_LATCH_PATH'])
   starter = NewRelic::Starter.new(latch)
   Resque.before_fork do
-    starter.start
+    starter.start(dispatcher: :resque, start_channel_listener: true)
   end
 end
 
